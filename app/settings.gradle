@@ -1,0 +1,2 @@
+rootProject.name='ZTDemo'
+include ':app'

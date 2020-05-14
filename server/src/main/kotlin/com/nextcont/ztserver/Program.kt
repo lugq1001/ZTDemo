@@ -1,10 +1,7 @@
 package com.nextcont.ztserver
 
 
-import com.nextcont.ztserver.handler.DisableHandler
-import com.nextcont.ztserver.handler.ExaminesHandler
-import com.nextcont.ztserver.handler.LoginHandler
-import com.nextcont.ztserver.handler.LogoutHandler
+import com.nextcont.ztserver.handler.*
 import com.nextcont.ztserver.model.User
 import io.javalin.Javalin
 import org.dizitart.kno2.nitrite
@@ -39,6 +36,7 @@ class Program {
             }
 
             server = Javalin.create().start(7000)
+            server.post("/device") { ctx -> DeviceHandler().process(ctx) }
             server.post("/login") { ctx -> LoginHandler().process(ctx) }
             server.post("/logout") { ctx -> LogoutHandler().process(ctx) }
             server.post("/disable") { ctx -> DisableHandler().process(ctx) }

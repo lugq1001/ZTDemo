@@ -14,7 +14,7 @@ abstract class Handler {
         val response = try {
             responseData(ctx)
         } catch (e: Exception) {
-            Response(-1, e.localizedMessage?: "Unknown Error", "")
+            Response(-1, e.localizedMessage ?: "Unknown Error", "")
         }
         val respJson = json.toJson(response)
         ctx.result(respJson).contentType("application/json")
