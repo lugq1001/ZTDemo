@@ -1,5 +1,6 @@
 package com.nextcont.ztserver.handler
 
+import com.nextcont.ztserver.Logger
 import com.nextcont.ztserver.Program
 import com.nextcont.ztserver.model.Device
 import com.nextcont.ztserver.model.Disable
@@ -15,22 +16,28 @@ import java.util.*
 class DisableHandler: Handler() {
 
     override fun responseData(ctx: Context): Response {
-        val resp = Response(0, "", "")
 
-        val authToken = ctx.header("auth") ?: return resp
+        val body = ctx.body()
+        val params = json.fromJson(body, Request::class.java)
 
-        val tokenRepo: ObjectRepository<Token> = Program.db.getRepository(Token::class.java)
-        val token = tokenRepo.find(eq("id", authToken)).singleOrNull() ?: return resp
+        Logger.info(params.toString())
 
-        val disableRepo: ObjectRepository<Disable> = Program.db.getRepository(Disable::class.java)
-        val disable = disableRepo.find(eq("userId", token.userId)).singleOrNull()
-        if (disable != null) {
-            disableRepo.remove(disable)
+        val deviceRepo: ObjectRepository<Device> = Program.db.getRepository(Device::class.java)
+        deviceRepo.find(eq("id", params.deviceId)).singleOrNull()?.let {
+            it.disableTime = System.currentTimeMillis()
+            it.loginTime = 0
+            it.userId = null
+            deviceRepo.update(it)
         }
-        disableRepo.insert(Disable(UUID.randomUUID().toString(), token.userId, System.currentTimeMillis()))
 
-        return resp
+        return Response(0, "", json.toJson(ResponseData()))
 
     }
+
+    data class Request(
+        val deviceId: String = ""
+    )
+
+    class ResponseData
 
 }

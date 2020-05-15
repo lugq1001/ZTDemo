@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.nextcont.mob.R
 import com.nextcont.mob.model.Account
 import com.nextcont.mob.network.MobApi
-import com.nextcont.mob.util.Util
+import com.nextcont.mob.util.DialogUtil
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -42,11 +42,11 @@ class LoginActivity : AppCompatActivity() {
         val username = iUserNameEdit.text.toString()
         val password = iPasswordEdit.text.toString()
         if (username.isEmpty()) {
-            Util.showAlert(this, getString(R.string.login_username_empty))
+            DialogUtil.showAlert(this, getString(R.string.login_username_empty))
             return
         }
         if (password.isEmpty()) {
-            Util.showAlert(this, getString(R.string.login_password_empty))
+            DialogUtil.showAlert(this, getString(R.string.login_password_empty))
             return
         }
 
@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ resp ->
-
+                Account.user = resp.user
                 startActivity(Intent(this, DashboardActivity::class.java))
                 finish()
             }, { e ->
@@ -68,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
                 iPasswordEdit.isEnabled = true
                 iLoginButton.visibility = VISIBLE
                 iProgress.visibility = INVISIBLE
-                Util.showAlert(this, e.localizedMessage)
+                DialogUtil.showAlert(this, e.localizedMessage)
             })
     }
 

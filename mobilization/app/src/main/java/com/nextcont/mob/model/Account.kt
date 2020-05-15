@@ -17,8 +17,7 @@ class Account {
 
         var deviceId = ""
 
-        const val username = "10001"
-        const val password = "111111"
+        var user: User? = null
 
 
         fun load(): Account {

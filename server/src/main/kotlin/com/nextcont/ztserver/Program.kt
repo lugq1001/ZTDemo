@@ -19,11 +19,13 @@ class Program {
         private lateinit var server: Javalin
         lateinit var db: Nitrite
 
+        private const val DB_VER = 7
+
         @JvmStatic
         fun main(args: Array<String>) {
 
             db = nitrite {
-                path = "ztserver0.db"
+                path = "ztserver${DB_VER}.db"
                 compress = true
                 autoCompact = false
             }
@@ -40,8 +42,8 @@ class Program {
             server.post("/login") { ctx -> LoginHandler().process(ctx) }
             server.post("/logout") { ctx -> LogoutHandler().process(ctx) }
             server.post("/disable") { ctx -> DisableHandler().process(ctx) }
-            server.get("/examines") { ctx -> ExaminesHandler().process(ctx) }
-
+            server.get("/evaluations") { ctx -> EvaluationsHandler().process(ctx) }
+            server.get("/users") { ctx -> UsersHandler().process(ctx) }
 
         }
 

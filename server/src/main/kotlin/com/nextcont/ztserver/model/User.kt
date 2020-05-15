@@ -15,7 +15,8 @@ data class User(
     val fullName: String,
     val age: Int,
     val job: String,
-    val avatar: String
+    val avatar: String,
+    val isAdmin: Boolean
 ) {
 
     companion object {
@@ -39,11 +40,11 @@ data class User(
             )
 
             val jobs = listOf(
-                "业务经理",
-                "销售",
-                "后勤保障",
-                "IT经理",
-                "公关经理"
+                "预备役少尉",
+                "预备役上尉",
+                "预备役少尉",
+                "预备役中校",
+                "预备役上校"
             )
 
             val avatars = listOf(
@@ -61,9 +62,10 @@ data class User(
                     userNames[index],
                     password,
                     fullNames[index],
-                    nextInt(24, 60),
+                    nextInt(18, 30),
                     jobs[index],
-                    avatars[index]
+                    avatars[index],
+                    index == 0
                 )
                 users.add(user)
             }

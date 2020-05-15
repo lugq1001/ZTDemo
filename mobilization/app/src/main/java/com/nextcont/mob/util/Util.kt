@@ -6,26 +6,11 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import com.nextcont.mob.R
 
 
 object Util {
 
-    fun showAlert(context: Context, message: String, action: (() -> Unit)? = null) {
-        AlertDialog.Builder(context)
-            .setTitle("系统提示")
-            .setMessage(message) // Specifying a listener allows you to take an action before dismissing the dialog.
-            // The dialog is automatically dismissed when a dialog button is clicked.
-            .setPositiveButton(
-                "确定"
-            ) { dialog, _ ->
-                dialog.dismiss()
-                action?.let {
-                    it()
-                }
-            } // A null listener allows the button to dismiss the dialog and take no further action.
-            .show()
-
-    }
 
     /**
      * Get the network info

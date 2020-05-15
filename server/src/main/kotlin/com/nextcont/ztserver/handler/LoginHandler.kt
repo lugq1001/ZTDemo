@@ -36,6 +36,7 @@ class LoginHandler: Handler() {
         val deviceRepo: ObjectRepository<Device> = Program.db.getRepository(Device::class.java)
         val device = deviceRepo.find(eq("id", params.deviceId)).singleOrNull() ?: throw Exception("无效的设备")
         device.userId = user.id
+        device.loginTime = System.currentTimeMillis()
         deviceRepo.update(device)
 
         return Response(0, "", json.toJson(ResponseData(user)))

@@ -25,10 +25,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.LoginActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.DashboardActivity" android:screenOrientation="portrait" />
-        <activity android:name=".ui.BindActivity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.DashboardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.BindActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

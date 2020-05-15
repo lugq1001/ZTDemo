@@ -2,19 +2,21 @@ package com.nextcont.mob.network
 
 import com.github.kittinunf.fuel.core.ResponseResultOf
 import com.github.kittinunf.fuel.core.extensions.jsonBody
+import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import com.google.gson.Gson
-import com.nextcont.mob.network.response.BaseResponse
-import com.nextcont.mob.network.response.DeviceRegisterResponse
-import com.nextcont.mob.network.response.LoginResponse
+import com.nextcont.mob.network.response.*
 import io.reactivex.rxjava3.core.Single
 import timber.log.Timber
 import java.lang.Exception
 
 object MobApi {
 
-    private const val BaseUrl = "http://192.168.15.60:7000"
+    //private const val BaseUrl = "http://192.168.15.60:7000"
+    //private const val BaseUrl = "http://192.168.50.122:7000"
+    private const val BaseUrl = "https://ztserver.inecm.cn"
+
 
     private val json: Gson = Gson()
 
@@ -62,6 +64,83 @@ object MobApi {
 
                 val resp = parseResponse<LoginResponse>(response)
                 Timber.d("用户登录: $resp")
+                emitter.onSuccess(resp)
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }
+    }
+
+    fun logout(deviceId: String): Single<LogoutResponse> {
+        return Single.create { emitter ->
+            try {
+                val params = mapOf(
+                    Pair("deviceId", deviceId)
+                )
+
+                val response = "${BaseUrl}/logout"
+                    .httpPost()
+                    .jsonBody(json.toJson(params))
+                    .responseString()
+
+                val resp = parseResponse<LogoutResponse>(response)
+                Timber.d("用户登出: $resp")
+                emitter.onSuccess(resp)
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }
+    }
+
+    fun disable(deviceId: String): Single<LogoutResponse> {
+        return Single.create { emitter ->
+            try {
+                val params = mapOf(
+                    Pair("deviceId", deviceId)
+                )
+
+                val response = "${BaseUrl}/disable"
+                    .httpPost()
+                    .jsonBody(json.toJson(params))
+                    .responseString()
+
+                val resp = parseResponse<LogoutResponse>(response)
+                Timber.d("注销设备: $resp")
+                emitter.onSuccess(resp)
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }
+    }
+
+    /**
+     * 登录
+     */
+    fun evaluations(): Single<EvaluationsResponse> {
+        return Single.create { emitter ->
+            try {
+                val response = "${BaseUrl}/evaluations"
+                    .httpGet()
+                    .responseString()
+
+                val resp = parseResponse<EvaluationsResponse>(response)
+                Timber.d("获取训练列表: $resp")
+                emitter.onSuccess(resp)
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }
+    }
+
+    fun users(): Single<UsersResponse> {
+        return Single.create { emitter ->
+            try {
+                val response = "${BaseUrl}/users"
+                    .httpGet()
+                    .responseString()
+
+                val resp = parseResponse<UsersResponse>(response)
+                Timber.d("获取用户: $resp")
                 emitter.onSuccess(resp)
             } catch (e: Exception) {
                 emitter.onError(e)

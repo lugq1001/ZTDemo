@@ -25,23 +25,29 @@ class DeviceHandler: Handler() {
         }
 
         val deviceId = info.md5
-
-        val respData = ResponseData(deviceId, null)
-
-        // todo 登录已过期
+        val respData = ResponseData(deviceId, null, expired = false, disabled = false)
 
         // 保存设备
         val deviceRepo: ObjectRepository<Device> = Program.db.getRepository(Device::class.java)
         var device = deviceRepo.find(ObjectFilters.eq("id", deviceId)).singleOrNull()
         if (device == null) {
-            device = Device(deviceId, null)
+            device = Device(deviceId, null, 0, 0)
             deviceRepo.insert(device)
         }
 
-        val userRepo: ObjectRepository<User> = Program.db.getRepository(User::class.java)
         device.userId?.let { id ->
+            val userRepo: ObjectRepository<User> = Program.db.getRepository(User::class.java)
             val user = userRepo.find(ObjectFilters.eq("id", id)).singleOrNull()
+            if (user != null) {
+                if (device.loginTime > 0 && (System.currentTimeMillis() - device.loginTime > 1000 * 300)) {
+                    respData.expired = true
+                }
+            }
             respData.user = user
+        }
+
+        if (device.disableTime > 0 && (System.currentTimeMillis() - device.disableTime < 1000 * 30)) {
+            respData.disabled = true
         }
 
         return Response(0, "", json.toJson(respData))
@@ -54,6 +60,8 @@ class DeviceHandler: Handler() {
 
     data class ResponseData(
         val deviceId: String,
-        var user: User?
+        var user: User?,
+        var expired: Boolean,
+        var disabled: Boolean
     )
 }

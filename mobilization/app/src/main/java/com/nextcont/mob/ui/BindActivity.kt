@@ -25,7 +25,6 @@ class BindActivity : AppCompatActivity() {
 
         iBindButton.setOnClickListener {
 
-            // todo 提示将不可更改
             val type = Account.currentNetwork(this)
             val account = Account.load()
             account.networkType = type

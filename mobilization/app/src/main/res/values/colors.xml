@@ -13,5 +13,8 @@
 
     <color name="colorSecure">#16C4AF</color>
 
+    <color name="split">#b2bec3</color>
+
+    <color name="colorWarning">#feca57</color>
 
 </resources>
